@@ -1,5 +1,6 @@
 pragma solidity >=0.5.16;
 
+import "./ConvertLib.sol";
 // ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
 //
@@ -50,7 +51,7 @@ contract NovaKoin is ERC20Interface, SafeMath {
         name = "NovaKoin";
         symbol = "NOK";
         decimals = 18;
-        _totalSupply = 100000000000000000000000000;
+        _totalSupply = 1000000000000;
 
         balances[msg.sender] = _totalSupply;
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -87,5 +88,20 @@ contract NovaKoin is ERC20Interface, SafeMath {
         balances[to] = safeAdd(balances[to], tokens);
         emit Transfer(from, to, tokens);
         return true;
+    }
+     function sendCoin(address receiver, uint amount) public returns(bool sufficient) {
+        if (balances[msg.sender] < amount) return false;
+        balances[msg.sender] -= amount;
+        balances[receiver] += amount;
+        emit Transfer(msg.sender, receiver, amount);
+        return true;
+    }
+
+    function getBalanceInEth(address addr) public view returns(uint) {
+        return ConvertLib.convert(getBalance(addr),2);
+    }
+
+    function getBalance(address addr) public view returns(uint) {
+        return balances[addr];
     }
 }
