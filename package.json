@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@truffle/compile-solidity": "^6.0.6"
+  }
+}
